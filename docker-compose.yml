@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: _docker/app/Dockerfile
+    volumes:
+      - ./backend:/var/www
+    depends_on:
+      - db
+      - nginx
+      - node
+    container_name: stinder_app
+    networks:
+      - internal
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./backend:/var/www
+      - ./_docker/rootfs/etc/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "8080:80"
+    container_name: stinder_nginx
+    networks:
+      - internal
+
+  db:
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - ./tmp/db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    container_name: stinder_db
+    networks:
+      - internal
+
+  node:
+    build:
+      context: .
+      dockerfile: _docker/node/Dockerfile
+    volumes:
+      - ./frontend:/var/www
+    ports:
+      - "80:8080"
+    container_name: stinder_node
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge
