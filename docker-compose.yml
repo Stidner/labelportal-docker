@@ -7,10 +7,18 @@ services:
       dockerfile: _docker/app/Dockerfile
     volumes:
       - ./backend:/var/www
+      - ./service-bring-citymail:/var/services/service-bring-citymail
+      - ./service-deutschepost:/var/services/service-deutschepost
+      - ./service-asendia:/var/services/service-asendia
+      - ./service-dhl-express:/var/services/service-dhl-express
+      - ./service-dhl-freight-v2:/var/services/service-dhl-freight-v2
+      - ./service-earlybird:/var/services/service-earlybird
+      - ./service-postnord-v2:/var/services/service-postnord-v2
     depends_on:
       - db
+      - redis
       - nginx
-      - node
+#      - node
     container_name: stinder_app
     networks:
       - internal
@@ -27,8 +35,7 @@ services:
       - internal
 
   db:
-    image: mysql:8.0
-    restart: always
+    image: mysql:8.0.33
     volumes:
       - ./tmp/db:/var/lib/mysql
     environment:
@@ -36,22 +43,29 @@ services:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - "3306:3306"
-    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    command: --default-authentication-plugin=mysql_native_password
     container_name: stinder_db
     networks:
       - internal
 
-  node:
-    build:
-      context: .
-      dockerfile: _docker/node/Dockerfile
-    volumes:
-      - ./frontend:/var/www
-    ports:
-      - "80:8080"
-    container_name: stinder_node
+  redis:
+    image: redis:alpine
+    container_name: stinder_redis
+    labels:
+      SERVICE_NAME: stinder_redis
     networks:
       - internal
+#  node:
+#    build:
+#      context: .
+#      dockerfile: _docker/node/Dockerfile
+#    volumes:
+#      - ./frontend:/var/www
+#    ports:
+#      - "80:8080"
+#    container_name: stinder_node
+#    networks:
+#      - internal
 
 networks:
   internal:
