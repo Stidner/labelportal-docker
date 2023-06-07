@@ -24,7 +24,9 @@ RUN apt-get update && apt-get install -y \
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 
-ADD _docker/rootfs /
+#ADD _docker/rootfs /
+COPY ./_docker/rootfs/etc/php.ini /usr/local/etc/php/conf.d/php.ini
+COPY ./_docker/rootfs/etc/php.ini /usr/local/etc/php/conf.d/php.ini
 
 # Install composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
