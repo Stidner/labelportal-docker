@@ -8,12 +8,16 @@ services:
     volumes:
       - ./backend:/var/www
       - ./service-bring-citymail:/var/services/service-bring-citymail
+      - ./service-bring:/var/services/service-bring
       - ./service-deutschepost:/var/services/service-deutschepost
       - ./service-asendia:/var/services/service-asendia
       - ./service-dhl-express:/var/services/service-dhl-express
       - ./service-dhl-freight-v2:/var/services/service-dhl-freight-v2
       - ./service-earlybird:/var/services/service-earlybird
       - ./service-postnord-v2:/var/services/service-postnord-v2
+      - ./service-mailer:/var/services/service-mailer
+      - ./service-importer-orders:/var/services/service-importer-orders
+      - ./pacsort-analytics-dashboard:/var/services/pacsort-analytics-dashboard
     depends_on:
       - db
       - redis
