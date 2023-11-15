@@ -15,9 +15,11 @@ services:
       - ./service-dhl-freight-v2:/var/services/service-dhl-freight-v2
       - ./service-earlybird:/var/services/service-earlybird
       - ./service-postnord-v2:/var/services/service-postnord-v2
+      - ./service-ups:/var/services/service-ups
       - ./service-mailer:/var/services/service-mailer
       - ./service-importer-orders:/var/services/service-importer-orders
       - ./pacsort-analytics-dashboard:/var/services/pacsort-analytics-dashboard
+      - ./carrier-structure:/var/services/carrier-structure
     depends_on:
       - db
       - redis
