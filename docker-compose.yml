@@ -18,8 +18,10 @@ services:
       - ./service-ups:/var/services/service-ups
       - ./service-mailer:/var/services/service-mailer
       - ./service-importer-orders:/var/services/service-importer-orders
+      - ./service-printing:/var/services/service-printing
       - ./pacsort-analytics-dashboard:/var/services/pacsort-analytics-dashboard
       - ./carrier-structure:/var/services/carrier-structure
+      - ./service-marketing:/var/services/service-marketing
     depends_on:
       - db
       - redis

@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.3-fpm
 
 # Replace default nginx user and group with IDs, matching current host user (developer)
 #ARG hostUID=1000
@@ -33,8 +33,12 @@ RUN apt-get update && apt-get install -y \
       docker-php-ext-install pcntl && \
       docker-php-ext-install intl && \
       docker-php-ext-install xsl && \
+      docker-php-ext-install sockets && \
       apt-get clean && \
       rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Ghostscript for PDF composer
+RUN apt-get update && apt-get install -y ghostscript
 
 # Install imagic
 RUN apt-get update && apt-get install -y \
@@ -50,7 +54,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install soap
 
 # install Xdebug
-RUN pecl install xdebug-3.2.1 \
+RUN pecl install xdebug-3.3.1 \
     && docker-php-ext-enable xdebug
 # install Xdebug
 #RUN pecl install xdebug-2.7.1 \
@@ -61,7 +65,7 @@ RUN echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xd
     && echo "xdebug.remote_autostart=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # redis extension
-RUN pecl install redis-5.3.4 && docker-php-ext-enable redis
+RUN pecl install redis-6.0.2 && docker-php-ext-enable redis
 
 #ADD _docker/rootfs /
 COPY ./_docker/rootfs/etc/php.ini /usr/local/etc/php/conf.d/php.ini
