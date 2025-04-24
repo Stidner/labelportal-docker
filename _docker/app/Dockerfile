@@ -15,7 +15,6 @@ FROM php:8.3-fpm
 #RUN addgroup --gid $GID www-data \
 #    && adduser --uid $UID --gid $GID --disabled-password --gecos '' www-data
 
-
 RUN apt-get update && apt-get install -y \
       wget \
       apt-utils \
@@ -45,6 +44,7 @@ RUN apt-get update && apt-get install -y \
     libmagickwand-dev --no-install-recommends \
     && pecl install imagick \
 	&& docker-php-ext-enable imagick
+
 RUN sed -i 's/rights="none" pattern="LABEL"/rights="read|write" pattern="LABEL"/' /etc/ImageMagick-6/policy.xml
 RUN sed -i 's/rights="none" pattern="PDF"/rights="read|write" pattern="PDF"/' /etc/ImageMagick-6/policy.xml
 
@@ -56,9 +56,6 @@ RUN apt-get update && apt-get install -y \
 # install Xdebug
 RUN pecl install xdebug-3.3.1 \
     && docker-php-ext-enable xdebug
-# install Xdebug
-#RUN pecl install xdebug-2.7.1 \
-#    && docker-php-ext-enable xdebug
 
 # configure Xdebug
 RUN echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \

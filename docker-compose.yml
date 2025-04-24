@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   app:
     build:
@@ -22,6 +20,7 @@ services:
       - ./pacsort-analytics-dashboard:/var/services/pacsort-analytics-dashboard
       - ./carrier-structure:/var/services/carrier-structure
       - ./service-marketing:/var/services/service-marketing
+      - ./service-letter-carrier:/var/services/service-letter-carrier
     depends_on:
       - db
       - redis
