@@ -1,4 +1,4 @@
-FROM php:8.3-fpm
+FROM php:8.4-fpm
 
 # Replace default nginx user and group with IDs, matching current host user (developer)
 #ARG hostUID=1000
@@ -43,18 +43,22 @@ RUN apt-get update && apt-get install -y ghostscript
 RUN apt-get update && apt-get install -y \
     libmagickwand-dev --no-install-recommends \
     && pecl install imagick \
-	&& docker-php-ext-enable imagick
+    && docker-php-ext-enable imagick
 
-RUN sed -i 's/rights="none" pattern="LABEL"/rights="read|write" pattern="LABEL"/' /etc/ImageMagick-6/policy.xml
-RUN sed -i 's/rights="none" pattern="PDF"/rights="read|write" pattern="PDF"/' /etc/ImageMagick-6/policy.xml
+# Relax ImageMagick policy (LABEL, PDF) for all installed versions
+RUN for f in /etc/ImageMagick*/policy.xml; do \
+      [ -f "$f" ] || continue; \
+      sed -i 's/rights="none" pattern="LABEL"/rights="read|write" pattern="LABEL"/' "$f"; \
+      sed -i 's/rights="none" pattern="PDF"/rights="read|write" pattern="PDF"/' "$f"; \
+    done
 
 # Install soap
 RUN apt-get update && apt-get install -y \
     libxml2-dev \
     && docker-php-ext-install soap
 
-# install Xdebug
-RUN pecl install xdebug-3.3.1 \
+# install Xdebug (PHP 8.4-compatible)
+RUN pecl install xdebug-3.4.7 \
     && docker-php-ext-enable xdebug
 
 # configure Xdebug
@@ -62,7 +66,7 @@ RUN echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xd
     && echo "xdebug.remote_autostart=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # redis extension
-RUN pecl install redis-6.0.2 && docker-php-ext-enable redis
+RUN pecl install redis && docker-php-ext-enable redis
 
 #ADD _docker/rootfs /
 COPY ./_docker/rootfs/etc/php.ini /usr/local/etc/php/conf.d/php.ini
