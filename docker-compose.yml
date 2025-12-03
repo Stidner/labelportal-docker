@@ -4,11 +4,12 @@ services:
       context: .
       dockerfile: _docker/app/Dockerfile
     volumes:
-      - ./backend:/var/www
+      - ./labelportal-core:/var/www
       - ./service-bring-citymail:/var/services/service-bring-citymail
       - ./service-bring:/var/services/service-bring
       - ./service-deutschepost:/var/services/service-deutschepost
       - ./service-asendia:/var/services/service-asendia
+      - ./service-posti:/var/services/service-posti
       - ./service-dhl-express:/var/services/service-dhl-express
       - ./service-dhl-freight-v2:/var/services/service-dhl-freight-v2
       - ./service-earlybird:/var/services/service-earlybird
@@ -17,7 +18,6 @@ services:
       - ./service-mailer:/var/services/service-mailer
       - ./service-importer-orders:/var/services/service-importer-orders
       - ./service-printing:/var/services/service-printing
-      - ./pacsort-analytics-dashboard:/var/services/pacsort-analytics-dashboard
       - ./carrier-structure:/var/services/carrier-structure
       - ./service-marketing:/var/services/service-marketing
       - ./service-letter-carrier:/var/services/service-letter-carrier
