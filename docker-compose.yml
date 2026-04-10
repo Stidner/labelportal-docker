@@ -42,15 +42,16 @@ services:
       - internal
 
   db:
-    image: mysql:8.0.33
+    image: mariadb:10.6
     volumes:
       - ./tmp/db:/var/lib/mysql
     environment:
       MYSQL_DATABASE: laravel
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: secret
     ports:
       - "3306:3306"
-    command: --default-authentication-plugin=mysql_native_password
     container_name: stinder_db
     networks:
       - internal
