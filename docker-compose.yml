@@ -21,6 +21,7 @@ services:
       - ../carrier-structure:/var/services/carrier-structure
       - ../service-marketing:/var/services/service-marketing
       - ../service-letter-carrier:/var/services/service-letter-carrier
+      - ../service-inventory:/var/services/service-inventory
     depends_on:
       - db
       - redis
