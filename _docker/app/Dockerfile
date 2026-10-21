@@ -1,4 +1,6 @@
-FROM php:8.4-fpm
+ARG PHP_BASE_IMAGE=php:8.4.27-fpm-trixie
+FROM ${PHP_BASE_IMAGE}
+RUN php -r 'exit(PHP_VERSION_ID >= 80427 && PHP_VERSION_ID < 80500 ? 0 : 1);'
 
 # Replace default nginx user and group with IDs, matching current host user (developer)
 #ARG hostUID=1000
